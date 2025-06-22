@@ -9,21 +9,28 @@ jobs:
   update-configs:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout your repo
+      - name: Checkout repo
         uses: actions/checkout@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0  # کل تاریخچه گیت رو می‌گیره
 
-      - name: Pull latest changes from original repo
-        run: |
-          git remote add upstream https://github.com/coldwater-10/V2Hub3.git
-          git fetch upstream
-          git merge upstream/main --allow-unrelated-histories -m "Auto update from upstream"
-
-      - name: Push changes back to your repo
+      - name: Setup git for pushing
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git push origin main
+
+      - name: Add upstream remote
+        run: |
+          git remote add upstream https://github.com/coldwater-10/V2Hub3.git
+          git fetch upstream
+
+      - name: Rebase upstream changes
+        run: |
+          git rebase upstream/main
+
+      - name: Push changes
+        run: |
+          git push origin HEAD:main --force
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
