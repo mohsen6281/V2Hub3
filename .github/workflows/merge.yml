@@ -26,3 +26,4 @@ jobs:
           git add -A
           git commit -m "🚀 Merged Successfully - $(TZ='Asia/Tehran' date '+%Y-%m-%d %H:%M:%S')"
           git push
+
