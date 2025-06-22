@@ -11,15 +11,19 @@ jobs:
     steps:
       - name: Checkout your repo
         uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Pull latest changes from original repo
         run: |
           git remote add upstream https://github.com/coldwater-10/V2Hub3.git
           git fetch upstream
           git merge upstream/main --allow-unrelated-histories -m "Auto update from upstream"
-      
+
       - name: Push changes back to your repo
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
